@@ -1,0 +1,63 @@
+<form>
+    <div class="form-group form-inline">
+            Поиск: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm"/>
+            <span class="ml-3" *ngIf="service.loading$ | async">Загрузка...</span>
+    </div>
+
+    <table class="table table-striped border-bottom">
+        <thead>
+        <tr>
+            <th></th>
+            <th scope="col" sortable="name" (sort)="onSort($event)">Название</th>
+            <th scope="col" sortable="description" (sort)="onSort($event)">Описание</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+            
+            <tr *ngFor="let item of dishes$ | async" >
+                <td>
+                    <div *ngIf="item.previewImg"
+                        class="img-preview shadow-sm" 
+                        [ngStyle]="{ 'background-image': 'url(' + url + '/' + item.previewImg + ')'}">
+                    </div>
+                </td> 
+                <td>
+                    <ngb-highlight [result]="item.name" [term]="service.searchTerm"></ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight [result]="item.availability | number: '.0'" [term]="service.searchTerm"></ngb-highlight> шт.
+                </td>
+                <td>
+                    <div class="switch">
+                        <input type="checkbox" 
+                            [(ngModel)]="item.activity" 
+                            name="activity{{item.id}}"
+                            (change)="changeActivity($event, item)">
+                        <label><i></i></label>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-sm" (click)="service.dishRemove(item.id)">
+                        <i class="fas fa-trash-alt"></i> 
+                    </button>
+                </td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between p-2">
+        <ngb-pagination
+            [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+        </ngb-pagination>
+        
+        <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+            <option [ngValue]="10">10 записей на странице</option>
+            <option [ngValue]="15">15 записей на странице</option>
+            <option [ngValue]="20">20 записей на странице</option>
+        </select>
+    </div>
+
+</form>

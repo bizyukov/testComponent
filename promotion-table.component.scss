@@ -1,0 +1,21 @@
+table{
+    th, td{
+        vertical-align: middle;
+
+        &:first-child{
+            width:50px;
+        }
+
+        &:last-child{
+            width:140px;
+        }
+
+        .img-preview{
+            width: 100px;
+            height: 100px;
+            background-position: center;
+            background-size: cover;
+            border-radius: 0.35rem;
+        }
+    }
+}
